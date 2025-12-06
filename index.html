@@ -32,7 +32,7 @@
             position: fixed;
             inset: 0;
             overflow: hidden;
-            pointer-events: none; /* не перекрывают клики */
+            pointer-events: none;
             z-index: 0;
         }
 
@@ -103,24 +103,6 @@
         .letter--visible {
             opacity: 1;
             transform: translateY(0) scale(1);
-        }
-
-        /* Оверлей декора не мешает кликам */
-        .letter::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(circle at 0 0, rgba(255, 183, 197, 0.16), transparent 55%),
-                radial-gradient(circle at 100% 0, rgba(151, 178, 250, 0.18), transparent 55%);
-            opacity: 0.8;
-            pointer-events: none;  /* ключевая строка */
-            z-index: 0;
-        }
-
-        .letter > * {
-            position: relative;
-            z-index: 1;
         }
 
         .envelope-label {
