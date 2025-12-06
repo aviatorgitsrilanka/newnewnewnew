@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متوقع الألعاب</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        /* Анимация пульсации для текста загрузки */
+        .pulsing-text {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+
+        /* Постоянное свечение для заголовка */
+        .title-glow {
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 16px rgba(79, 70, 229, 0.5);
+        }
+
+        /* Общий стиль для кнопок игры, чтобы избежать скачка при добавлении рамки */
+        .game-btn {
+            border: 2px solid transparent;
+        }
+
+        /* Стиль для активной кнопки */
+        .active-game-btn {
+            background-color: #4f46e5; /* indigo-600 */
+            color: white;
+            border-color: #818cf8; /* indigo-400 */
+        }
+        
+        /* Стили для плавного появления */
+        .controls-hidden {
+            opacity: 0.5;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .controls-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-700">
+        
+        <!-- Заголовок -->
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold">
+                <span class="title-glow">
+                    <span style="color: #006633;">AL</span><span style="color: #D21034;">GER</span><span style="color: #FFFFFF;">IA</span>
+                </span>
+                <span class="text-indigo-400"> AI HUB</span>
+            </h1>
+        </div>
+        
+        <!-- Поле для ID -->
+        <div id="auth-section" class="mb-6 space-y-3">
+            <p class="text-gray-400 text-sm text-center">أدخل مُعرّفك (ID) لبدء التشغيل</p>
+            <input id="player-id-input" type="text" placeholder="مُعرّف اللاعب الخاص بك" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right">
+            <button id="connect-btn" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                اتصال
+            </button>
+        </div>
+        
+        <!-- Основной интерфейс предиктора (изначально неактивен) -->
+        <div id="predictor-controls" class="controls-hidden">
+            <!-- Выбор игры -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-3 text-gray-300">الألعاب:</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <button id="aviator-btn" class="game-btn active-game-btn flex items-center justify-center gap-2 w-full py-3 px-2 bg-gray-700 rounded-lg font-semibold transition-colors duration-200 hover:bg-indigo-500">
+                        ✈️ Aviator
+                    </button>
+                    <button id="mines-btn" class="game-btn flex items-center justify-center gap-2 w-full py-3 px-2 bg-gray-700 rounded-lg font-semibold transition-colors duration-200 hover:bg-indigo-500">
+                        💣 Mines
+                    </button>
+                    <button id="penalty-btn" class="game-btn flex items-center justify-center gap-2 w-full py-3 px-2 bg-gray-700 rounded-lg font-semibold transition-colors duration-200 hover:bg-indigo-500">
+                        ⚽ Penalty
+                    </button>
+                    <button id="apple-btn" class="game-btn flex items-center justify-center gap-2 w-full py-3 px-2 bg-gray-700 rounded-lg font-semibold transition-colors duration-200 hover:bg-indigo-500">
+                        🍏 Apple of Fortune
+                    </button>
+                </div>
+            </div>
+
+            <!-- Область для вывода сигнала -->
+            <div id="signal-display" class="bg-gray-900/50 min-h-[260px] rounded-lg p-6 flex items-center justify-center text-center border-2 border-dashed border-gray-600">
+                <p id="signal-text" class="text-gray-500 text-lg font-medium">في انتظار الإشارة...</p>
+            </div>
+
+            <!-- Кнопка генерации -->
+            <div class="mt-8">
+                <button id="generate-signal-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg uppercase tracking-wider">
+                    🚀 الحصول على إشارة
+                </button>
+            </div>
+        </div>
+
+        <!-- Кнопки внешних ссылок -->
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a href="https://t.me/hamzadz_bot" target="_blank" rel="noopener noreferrer" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 text-center flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-telegram" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.226.63.42.996.635.62.395.86.205.975-.258a1.06 1.06 0 0 0 .117-.517c.07-.414.159-1.185.159-1.185s.012-.11.117-.375c.05-.13.11-.253.185-.344l.016-.02c.16-.245.4-.557.4-.557s.078-.08.18-.184c.101-.104.18-.184.18-.184s.078-.08.114-.133c.038-.053.075-.104.11-.16B.03 8.35 15.22 4.223.865 3.312c-.775-.45-1.48-.18-1.76.193s-.255.935-.255.935l-3.328 3.328c-.283.283-.56.565-.56.565s-.182.173-.32.32c-.138.147-.286.295-.286.295l-1.05 1.05c-.282.282-.563.565-.563.565s-.182.173-.32.32c-.137.146-.285.294-.285.294l-2.078 2.078c-.282.282-.563.565-.563.565s-.182.173-.32.32c-.137.146-.285.294-.285.294l-2.078 2.078c-.282.282-.563.565-.563.565s-.182.173-.32.32c-.137.146-.285.294-.285.294L8.287 5.906z"/>
+                </svg>
+                <span>تليجرام</span>
+            </a>
+            <a href="https://reffpa.com/L?tag=d_3821435m_18609c_&site=3821435&ad=18609&r=registration" target="_blank" rel="noopener noreferrer" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 text-center flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                    <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                </svg>
+                <span>الانتقال إلى الموقع</span>
+            </a>
+        </div>
+
+        <!-- Предупреждение -->
+        <div class="mt-8 text-center">
+            <p class="text-xs text-gray-500">
+                &copy; 2025 ALGERIA AI HUB. جميع الحقوق محفوظة.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DOM Элементы ---
+        const playerIdInput = document.getElementById('player-id-input');
+        const connectBtn = document.getElementById('connect-btn');
+        const predictorControls = document.getElementById('predictor-controls');
+        
+        const aviatorBtn = document.getElementById('aviator-btn');
+        const minesBtn = document.getElementById('mines-btn');
+        const penaltyBtn = document.getElementById('penalty-btn');
+        const appleBtn = document.getElementById('apple-btn');
+        const generateSignalBtn = document.getElementById('generate-signal-btn');
+        const signalDisplay = document.getElementById('signal-display');
+        const signalText = document.getElementById('signal-text');
+        const gameButtons = document.querySelectorAll('.game-btn');
+
+        // --- Состояние приложения ---
+        let selectedGame = 'aviator'; // Игра по умолчанию
+        let isGenerating = false;
+
+        // --- Функции ---
+
+        /**
+         * Обновляет активную кнопку игры в интерфейсе
+         */
+        function updateActiveButton() {
+            gameButtons.forEach(btn => btn.classList.remove('active-game-btn'));
+            const activeBtn = document.getElementById(`${selectedGame}-btn`);
+            if (activeBtn) {
+                activeBtn.classList.add('active-game-btn');
+            }
+        }
+
+        /**
+         * Генерирует случайный сигнал для игры Aviator
+         */
+        function generateAviatorSignal() {
+            const chance = Math.random();
+            let coefficient;
+
+            if (chance < 0.75) {
+                // 75% шанс для кэфов от 1.01 до 2.00
+                coefficient = (Math.random() * (2.00 - 1.01) + 1.01).toFixed(2);
+            } else if (chance < 0.95) {
+                // 20% шанс для кэфов от 2.01 до 4.00
+                coefficient = (Math.random() * (4.00 - 2.01) + 2.01).toFixed(2);
+            } else {
+                // 5% шанс для кэфов от 4.01 до 10.00
+                coefficient = (Math.random() * (10.00 - 4.01) + 4.01).toFixed(2);
+            }
+            
+            return `اسحب عند <span class="text-green-400 font-bold text-3xl">${coefficient}x</span>`;
+        }
+
+        /**
+         * Генерирует случайный сигнал для игры Mines в виде сетки
+         */
+        function generateMinesSignal() {
+            const totalCells = 25;
+            const safeCellsCount = 5;
+            const safeCells = new Set();
+            while (safeCells.size < safeCellsCount) {
+                const cell = Math.floor(Math.random() * totalCells) + 1;
+                safeCells.add(cell);
+            }
+
+            let gridHTML = '<div class="grid grid-cols-5 gap-2 w-full max-w-[250px] mx-auto">';
+            for (let i = 1; i <= totalCells; i++) {
+                if (safeCells.has(i)) {
+                    gridHTML += `<div class="w-full aspect-square bg-emerald-500/20 border border-emerald-500 rounded-md flex items-center justify-center text-3xl text-emerald-400">⭐</div>`;
+                } else {
+                    gridHTML += `<div class="w-full aspect-square bg-gray-700 rounded-md"></div>`;
+                }
+            }
+            gridHTML += '</div>';
+            
+            return `<div class="w-full">
+                        <p class="mb-4 text-lg font-semibold text-gray-300">الخانات الآمنة:</p>
+                        ${gridHTML}
+                    </div>`;
+        }
+
+        /**
+         * Генерирует случайный сигнал для игры Penalty в виде сетки ворот
+         */
+        function generatePenaltySignal() {
+            const totalTargets = 15; // 3 ряда * 5 колонок
+            const targetCell = Math.floor(Math.random() * totalTargets) + 1;
+
+            let gridHTML = '<div class="grid grid-cols-5 gap-2 w-full max-w-[250px] mx-auto">';
+            for (let i = 1; i <= totalTargets; i++) {
+                if (i === targetCell) {
+                    gridHTML += `<div class="w-full aspect-square bg-green-500/20 border border-green-500 rounded-md flex items-center justify-center text-4xl">⚽</div>`;
+                } else {
+                    gridHTML += `<div class="w-full aspect-square bg-gray-700/50 border border-gray-600 rounded-md"></div>`;
+                }
+            }
+            gridHTML += '</div>';
+
+            return `<div class="w-full">
+                        <p class="mb-4 text-lg font-semibold text-gray-300">الهدف للتسديد:</p>
+                        ${gridHTML}
+                    </div>`;
+        }
+        
+        /**
+         * Генерирует случайный сигнал для игры Apple of Fortune
+         */
+        function generateAppleSignal() {
+            const rows = 10;
+            const cols = 5;
+            
+            const safePath = [];
+            for (let i = 0; i < rows; i++) {
+                safePath.push(Math.floor(Math.random() * cols));
+            }
+
+            let gridContainerHTML = `<div class="flex justify-center items-stretch gap-3">`;
+
+            let gridHTML = `<div class="grid grid-cols-5 gap-1 w-full max-w-[200px]">`;
+            for (let r = rows - 1; r >= 0; r--) {
+                for (let c = 0; c < cols; c++) {
+                    if (c === safePath[r]) {
+                        gridHTML += `<div class="w-full aspect-square bg-rose-500/20 border border-rose-500 rounded-md flex items-center justify-center text-2xl">🍎</div>`;
+                    } else {
+                        gridHTML += `<div class="w-full aspect-square bg-gray-700/60 rounded-md flex items-center justify-center text-2xl opacity-50">?</div>`;
+                    }
+                }
+            }
+            gridHTML += `</div>`;
+            
+            let numbersHTML = `<div class="flex flex-col text-xs text-gray-400 font-mono">`;
+            for(let i = rows; i >= 1; i--) {
+                numbersHTML += `<div class="flex-1 flex items-center justify-center">${i}</div>`;
+            }
+            numbersHTML += `</div>`;
+
+            gridContainerHTML += gridHTML + numbersHTML + `</div>`;
+            
+            return `<div class="w-full">
+                        <p class="mb-3 text-lg font-semibold text-gray-300">المسار الآمن:</p>
+                        ${gridContainerHTML}
+                    </div>`;
+        }
+        
+        /**
+         * Основная функция для генерации и отображения сигнала
+         */
+        function handleSignalGeneration() {
+            if (isGenerating) return; 
+            
+            isGenerating = true;
+            generateSignalBtn.disabled = true;
+            generateSignalBtn.textContent = '...جاري التحليل';
+            
+            signalText.innerHTML = '<span class="pulsing-text">...جاري توليد الإشارة</span>';
+            signalText.className = 'text-yellow-400 text-lg font-medium';
+
+            setTimeout(() => {
+                let signalHTML = '';
+                
+                if (selectedGame === 'aviator') {
+                    signalHTML = generateAviatorSignal();
+                } else if (selectedGame === 'mines') {
+                    signalHTML = generateMinesSignal();
+                } else if (selectedGame === 'penalty') {
+                    signalHTML = generatePenaltySignal();
+                } else if (selectedGame === 'apple') {
+                    signalHTML = generateAppleSignal();
+                }
+
+                signalText.innerHTML = signalHTML;
+                
+                isGenerating = false;
+                generateSignalBtn.disabled = false;
+                generateSignalBtn.textContent = '🚀 الحصول على إشارة';
+            }, 2000); 
+        }
+
+        // --- Обработчики событий ---
+        
+        connectBtn.addEventListener('click', () => {
+            const playerId = playerIdInput.value.trim();
+            const idRegex = /^\d{10,13}$/; // Регулярное выражение для 10-13 цифр
+
+            if (!idRegex.test(playerId)) {
+                playerIdInput.classList.add('border-red-500');
+                playerIdInput.value = ''; // Очищаем поле
+                playerIdInput.placeholder = "المعرّف غير صحيح (10-13 رقمًا)";
+                return;
+            }
+            
+            // Если все в порядке, убираем красную рамку, если она была
+            playerIdInput.classList.remove('border-red-500');
+
+            connectBtn.disabled = true;
+            connectBtn.textContent = '...جاري الاتصال';
+
+            setTimeout(() => {
+                playerIdInput.disabled = true;
+                connectBtn.textContent = '✅ متصل';
+                connectBtn.classList.remove('bg-teal-600', 'hover:bg-teal-700');
+                connectBtn.classList.add('bg-gray-600');
+                
+                // Активируем основной интерфейс
+                predictorControls.classList.remove('controls-hidden');
+                predictorControls.classList.add('controls-visible');
+
+            }, 1500);
+        });
+
+        document.getElementById('aviator-btn').addEventListener('click', () => {
+            selectedGame = 'aviator';
+            updateActiveButton();
+        });
+        document.getElementById('mines-btn').addEventListener('click', () => {
+            selectedGame = 'mines';
+            updateActiveButton();
+        });
+        document.getElementById('penalty-btn').addEventListener('click', () => {
+            selectedGame = 'penalty';
+            updateActiveButton();
+        });
+        document.getElementById('apple-btn').addEventListener('click', () => {
+            selectedGame = 'apple';
+            updateActiveButton();
+        });
+
+        generateSignalBtn.addEventListener('click', handleSignalGeneration);
+
+        // --- Инициализация ---
+        updateActiveButton(); 
+
+        // Изначально установим правильный текст на кнопке
+        generateSignalBtn.textContent = '🚀 الحصول على إشارة';
+    </script>
+</body>
+</html>
+
