@@ -53,25 +53,11 @@
         .heart:nth-child(8) { left: 92%; animation-duration: 20s; animation-delay: 5s;   font-size: 18px; }
 
         @keyframes floatUp {
-            0% {
-                transform: translateY(120%) scale(0.7);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.35;
-            }
-            40% {
-                transform: translateY(40%) scale(1);
-                opacity: 0.7;
-            }
-            70% {
-                transform: translateY(-20%) scale(1.05);
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-120%) scale(1.1);
-                opacity: 0;
-            }
+            0%   { transform: translateY(120%) scale(0.7); opacity: 0; }
+            10%  { opacity: 0.35; }
+            40%  { transform: translateY(40%)  scale(1);   opacity: 0.7; }
+            70%  { transform: translateY(-20%) scale(1.05);opacity: 0.6; }
+            100% { transform: translateY(-120%)scale(1.1); opacity: 0; }
         }
 
         .wrapper {
@@ -251,6 +237,41 @@
             margin-top: 12px;
         }
 
+        /* Плавающая всплывающая картинка */
+        .floating-image {
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            bottom: 10%;
+            right: 10%;
+            opacity: 0;
+            pointer-events: none; /* чтобы не мешала кликам */
+            z-index: 20;
+            transform: translate(0, 0);
+            transition: opacity 0.6s ease;
+            animation: floatAround 14s ease-in-out infinite;
+        }
+
+        .floating-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .floating-image.visible {
+            opacity: 1;
+        }
+
+        @keyframes floatAround {
+            0%   { transform: translate(0, 0); }
+            25%  { transform: translate(-20vw, -5vh); }
+            50%  { transform: translate(-10vw, 10vh); }
+            75%  { transform: translate(15vw, -10vh); }
+            100% { transform: translate(0, 0); }
+        }
+
         @media (max-width: 480px) {
             .letter {
                 padding: 22px 18px 22px;
@@ -265,6 +286,11 @@
                 width: 60px;
                 height: 60px;
                 font-size: 22px;
+            }
+
+            .floating-image {
+                width: 120px;
+                height: 120px;
             }
         }
     </style>
@@ -344,6 +370,12 @@
 
 </div>
 
+<!-- Плавающая всплывающая картинка
+     ЗАМЕНИ floating.png на свой файл -->
+<div class="floating-image" id="floatingImage">
+    <img src="floating.png" alt="Сюрприз">
+</div>
+
 <script>
     const CORRECT_ANSWERS = ["тимур", "timur"];
 
@@ -352,9 +384,28 @@
     const answerInput = document.getElementById("answerInput");
     const openButton = document.getElementById("openButton");
     const errorText = document.getElementById("errorText");
+    const floatingImage = document.getElementById("floatingImage");
 
     function normalizeAnswer(value) {
         return value.trim().toLowerCase().replace(/\s+/g, " ");
+    }
+
+    function showFloatingImageDelayed() {
+        // через 3.5 секунды после открытия письма
+        setTimeout(() => {
+            floatingImage.classList.add("visible");
+        }, 3500);
+    }
+
+    function openLetter() {
+        step1.classList.remove("letter--visible");
+        step1.classList.add("letter--hidden");
+
+        setTimeout(() => {
+            step2.classList.remove("letter--hidden");
+            step2.classList.add("letter--visible");
+            showFloatingImageDelayed();
+        }, 260);
     }
 
     function checkAnswer() {
@@ -373,14 +424,7 @@
         }
 
         errorText.textContent = "";
-
-        step1.classList.remove("letter--visible");
-        step1.classList.add("letter--hidden");
-
-        setTimeout(() => {
-            step2.classList.remove("letter--hidden");
-            step2.classList.add("letter--visible");
-        }, 260);
+        openLetter();
     }
 
     openButton.addEventListener("click", checkAnswer);
