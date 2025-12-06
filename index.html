@@ -5,18 +5,13 @@
     <title>Личное письмо</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Шрифт -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: "Nunito", sans-serif;
             background: radial-gradient(circle at top, #ffeef5 0, #f4f7ff 35%, #e6ecff 100%);
             min-height: 100vh;
             display: flex;
@@ -28,7 +23,6 @@
             overflow: hidden;
         }
 
-        /* Фон с плавающими сердечками */
         .hearts {
             position: fixed;
             inset: 0;
@@ -44,35 +38,21 @@
             animation: floatUp 14s linear infinite;
         }
 
-        .heart:nth-child(1) { left: 5%;  animation-duration: 16s; animation-delay: 0s;   font-size: 18px; }
-        .heart:nth-child(2) { left: 15%; animation-duration: 18s; animation-delay: 3s;   font-size: 22px; }
-        .heart:nth-child(3) { left: 28%; animation-duration: 14s; animation-delay: 6s;   font-size: 19px; }
+        .heart:nth-child(1) { left: 5%; animation-duration: 16s; animation-delay: 0s; font-size: 18px; }
+        .heart:nth-child(2) { left: 15%; animation-duration: 18s; animation-delay: 3s; font-size: 22px; }
+        .heart:nth-child(3) { left: 28%; animation-duration: 14s; animation-delay: 6s; font-size: 19px; }
         .heart:nth-child(4) { left: 40%; animation-duration: 17s; animation-delay: 1.5s; font-size: 24px; }
         .heart:nth-child(5) { left: 55%; animation-duration: 15s; animation-delay: 4.5s; font-size: 20px; }
-        .heart:nth-child(6) { left: 68%; animation-duration: 19s; animation-delay: 2s;   font-size: 23px; }
-        .heart:nth-child(7) { left: 80%; animation-duration: 16s; animation-delay: 7s;   font-size: 21px; }
-        .heart:nth-child(8) { left: 92%; animation-duration: 20s; animation-delay: 5s;   font-size: 18px; }
+        .heart:nth-child(6) { left: 68%; animation-duration: 19s; animation-delay: 2s; font-size: 23px; }
+        .heart:nth-child(7) { left: 80%; animation-duration: 16s; animation-delay: 7s; font-size: 21px; }
+        .heart:nth-child(8) { left: 92%; animation-duration: 20s; animation-delay: 5s; font-size: 18px; }
 
         @keyframes floatUp {
-            0% {
-                transform: translateY(120%) translateX(0) scale(0.7);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.35;
-            }
-            40% {
-                transform: translateY(40%) translateX(-10px) scale(1);
-                opacity: 0.7;
-            }
-            70% {
-                transform: translateY(-20%) translateX(10px) scale(1.05);
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-120%) translateX(0) scale(1.1);
-                opacity: 0;
-            }
+            0% { transform: translateY(120%) scale(0.7); opacity: 0; }
+            10% { opacity: 0.35; }
+            40% { transform: translateY(40%) scale(1); opacity: 0.7; }
+            70% { transform: translateY(-20%) scale(1.05); opacity: 0.6; }
+            100% { transform: translateY(-120%) scale(1.1); opacity: 0; }
         }
 
         .wrapper {
@@ -86,457 +66,177 @@
         .letter {
             background: #fff;
             border-radius: 18px;
-            box-shadow:
-                0 24px 60px rgba(0, 0, 0, 0.12),
-                0 0 0 1px rgba(255, 255, 255, 0.9);
-            padding: 26px 22px 26px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.12), 0 0 0 1px rgba(255,255,255,0.9);
+            padding: 26px 22px;
             position: relative;
             overflow: hidden;
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: opacity .6s ease, transform .6s ease;
         }
 
-        .letter--hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(10px) scale(0.98);
-        }
-
-        .letter--visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+        .letter--hidden { opacity: 0; pointer-events: none; transform: translateY(10px) scale(.98); }
+        .letter--visible { opacity: 1; transform: translateY(0) scale(1); }
 
         .letter::before {
-            content: "";
-            position: absolute;
-            inset: 0;
+            content:"";
+            position:absolute; inset:0;
             background-image:
-                    radial-gradient(circle at 0 0, rgba(255, 183, 197, 0.16), transparent 55%),
-                    radial-gradient(circle at 100% 0, rgba(151, 178, 250, 0.18), transparent 55%);
-            opacity: 0.8;
-            pointer-events: none;
-        }
-
-        .letter-content {
-            position: relative;
-            z-index: 1;
+                radial-gradient(circle at 0 0, rgba(255,183,197,0.16), transparent 55%),
+                radial-gradient(circle at 100% 0, rgba(151,178,250,0.18), transparent 55%);
+            opacity:.8;
         }
 
         .envelope-label {
             font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 0.16em;
+            letter-spacing: .16em;
             color: #999;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 10px;
+            display:flex;
+            align-items:center;
+            gap:6px;
+            margin-bottom:10px;
         }
 
         .envelope-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ff7a9a;
-            box-shadow: 0 0 0 4px rgba(255, 122, 154, 0.25);
+            width:8px;height:8px;border-radius:50%;
+            background:#ff7a9a;
+            box-shadow:0 0 0 4px rgba(255,122,154,0.25);
         }
 
         .stamp {
-            position: absolute;
-            right: 18px;
-            top: 16px;
-            width: 70px;
-            height: 70px;
-            border-radius: 14px;
-            border: 1px dashed rgba(0, 0, 0, 0.12);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            transform: rotate(6deg);
-            opacity: 0.85;
-            background: rgba(255, 255, 255, 0.8);
+            position:absolute;
+            right:18px; top:16px;
+            width:70px; height:70px;
+            border-radius:14px;
+            border:1px dashed rgba(0,0,0,0.12);
+            display:flex; align-items:center; justify-content:center;
+            font-size:26px;
+            transform:rotate(6deg);
+            background:rgba(255,255,255,0.8);
         }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            line-height: 1.25;
-        }
+        h1 { font-size:24px; margin-bottom:8px; }
+        .subtitle { font-size:14px; color:#777; margin-bottom:18px; }
 
-        .subtitle {
-            font-size: 14px;
-            color: #777;
-            margin-bottom: 18px;
-        }
+        .text { font-size:15px; line-height:1.5; margin-bottom:18px; }
 
-        .text {
-            font-size: 15px;
-            line-height: 1.5;
-            margin-bottom: 18px;
-        }
+        .question-label { font-size:14px; font-weight:600; margin-bottom:6px; }
 
-        .question-block {
-            margin-top: 8px;
-        }
+        .question-text { font-size:15px; margin-bottom:12px; }
 
-        .question-label {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .question-text {
-            font-size: 15px;
-            margin-bottom: 12px;
-        }
-
-        .input-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 6px;
-        }
+        .input-row { display:flex; gap:8px; margin-bottom:6px; }
 
         input[type="text"] {
-            flex: 1;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 0, 0, 0.16);
-            font-size: 15px;
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-            background: rgba(255, 255, 255, 0.95);
+            flex:1; padding:10px 12px;
+            border-radius:10px;
+            border:1px solid rgba(0,0,0,0.16);
+            font-size:15px;
+            background:rgba(255,255,255,0.95);
         }
 
         input[type="text"]:focus {
-            border-color: #ff7a9a;
-            box-shadow: 0 0 0 3px rgba(255, 122, 154, 0.25);
-            background: #ffffff;
+            border-color:#ff7a9a;
+            box-shadow:0 0 0 3px rgba(255,122,154,0.25);
         }
 
         button {
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-            padding: 10px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            white-space: nowrap;
-            background: linear-gradient(135deg, #ff7a9a, #ffb878);
-            color: #fff;
-            box-shadow: 0 10px 25px rgba(255, 122, 154, 0.45);
-            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+            padding:10px 16px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            background:linear-gradient(135deg,#ff7a9a,#ffb878);
+            color:#fff;
+            font-weight:600;
         }
 
-        button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 14px 30px rgba(255, 122, 154, 0.55);
-            filter: brightness(1.03);
-        }
-
-        button:active {
-            transform: translateY(1px) scale(0.98);
-            box-shadow: 0 6px 15px rgba(255, 122, 154, 0.4);
-        }
-
-        .hint {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .error {
-            font-size: 13px;
-            color: #d6234a;
-            margin-top: 6px;
-            min-height: 17px;
-        }
+        .error { font-size:13px; color:#d6234a; margin-top:6px; height:17px; }
 
         .invite-text {
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 18px;
+            font-size:15px;
+            line-height:1.6;
+            margin-bottom:18px;
         }
 
         .invite-image-wrapper {
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-            margin-bottom: 16px;
+            border-radius:16px;
+            overflow:hidden;
+            margin-bottom:16px;
         }
 
-        .invite-image-wrapper img {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
+        .invite-image-wrapper img { width:100%; display:block; }
 
-        /* Таймер */
-        .timer-block {
-            margin-top: 10px;
-            padding: 12px 14px;
-            border-radius: 12px;
-            background: rgba(255, 244, 248, 0.95);
-            border: 1px solid rgba(255, 122, 154, 0.25);
-        }
+        .date-note { font-size:13px; color:#777; margin-top:12px; }
 
-        .timer-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .timer-display {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-        }
-
-        .timer-display span {
-            display: inline-block;
-            min-width: 40px;
-            text-align: center;
-        }
-
-        .timer-labels {
-            font-size: 11px;
-            color: #999;
-            margin-top: 4px;
-        }
-
-        .date-note {
-            font-size: 13px;
-            color: #777;
-            margin-top: 12px;
-        }
-
-        @media (max-width: 480px) {
-            .letter {
-                padding: 22px 18px 22px;
-                border-radius: 16px;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            .stamp {
-                width: 60px;
-                height: 60px;
-                font-size: 22px;
-            }
-        }
     </style>
 </head>
 <body>
 
-<!-- Фоновые сердечки -->
-<div class="hearts" aria-hidden="true">
-    <div class="heart">❤</div>
-    <div class="heart">❤</div>
-    <div class="heart">❤</div>
-    <div class="heart">❤</div>
-    <div class="heart">❤</div>
-    <div class="heart">❤</div>
-    <div class="heart">❤</div>
-    <div class="heart">❤</div>
+<div class="hearts">
+    <div class="heart">❤</div><div class="heart">❤</div><div class="heart">❤</div>
+    <div class="heart">❤</div><div class="heart">❤</div><div class="heart">❤</div>
+    <div class="heart">❤</div><div class="heart">❤</div>
 </div>
 
 <div class="wrapper">
-    <!-- Шаг 1: «Вам письмо» + вопрос -->
+
+    <!-- Шаг 1 -->
     <div class="letter letter--visible" id="step1">
-        <div class="letter-content">
-            <div class="envelope-label">
-                <span class="envelope-dot"></span>
-                <span>Вам личное письмо</span>
-            </div>
+        <div class="envelope-label"><span class="envelope-dot"></span>Вам личное письмо</div>
+        <div class="stamp">💌</div>
 
-            <div class="stamp">💌</div>
+        <h1>Открой меня, пожалуйста</h1>
+        <p class="subtitle">Кому-то очень важному…</p>
 
-            <h1>Открой меня, пожалуйста</h1>
-            <p class="subtitle">Кому-то очень важному…</p>
+        <p class="text">
+            Привет, любимая.  
+            Здесь спрятано небольшое приглашение — оно на особенный вечер только для нас двоих.
+            Но прежде чем письмо откроется, ответь на один вопрос.
+        </p>
 
-            <p class="text">
-                Привет, любимая.  
-                Здесь спрятано небольшое приглашение — оно на особенный вечер только для нас двоих.
-                Но прежде чем письмо откроется, ответь на один вопрос.
-            </p>
+        <p class="question-label">Вопрос</p>
+        <p class="question-text">
+            Как зовут человека, который любит тебя сильнее всех на свете?
+        </p>
 
-            <div class="question-block">
-                <div class="question-label">Вопрос</div>
-                <p class="question-text" id="questionText">
-                    Как зовут человека, который любит тебя сильнее всех на свете?
-                </p>
-
-                <div class="input-row">
-                    <input type="text"
-                           id="answerInput"
-                           placeholder="Напиши ответ здесь">
-                    <button id="openButton" type="button">Открыть письмо</button>
-                </div>
-
-                <p class="hint">
-                    Подсказка: можно написать просто <strong>Вират</strong> 💙
-                </p>
-                <p class="error" id="errorText"></p>
-            </div>
+        <div class="input-row">
+            <input type="text" id="answerInput" placeholder="Напиши ответ здесь">
+            <button id="openButton">Открыть письмо</button>
         </div>
+
+        <p class="error" id="errorText"></p>
     </div>
 
-    <!-- Шаг 2: Появляется картинка-приглашение -->
+    <!-- Шаг 2 -->
     <div class="letter letter--hidden" id="step2">
-        <div class="letter-content">
-            <div class="envelope-label">
-                <span class="envelope-dot"></span>
-                <span>Приглашение на свидание</span>
-            </div>
+        <div class="envelope-label"><span class="envelope-dot"></span>Приглашение на свидание</div>
+        <div class="stamp">❤️</div>
 
-            <div class="stamp">❤️</div>
+        <h1>Пойдём на свидание?</h1>
 
-            <h1>Пойдём на свидание?</h1>
-            <p class="invite-text">
-                Я хочу провести с тобой вечер, в котором не будет ничего лишнего — только мы.
-                Небольшой сюрприз, вкусная еда и время, которое принадлежит только нам двоим.
-            </p>
+        <p class="invite-text">
+            Я хочу провести с тобой вечер, в котором не будет ничего лишнего — только мы. 
+            Вкусная еда, интересное занятие и мини подарочек.
+        </p>
 
-            <!-- Картинка-приглашение: замени src на свой файл или ссылку -->
-            <div class="invite-image-wrapper">
-                <img src="invitation.jpg" alt="Приглашение на свидание">
-            </div>
-
-            <!-- Таймер до свидания -->
-            <div class="timer-block">
-                <div class="timer-title">До нашего свидания осталось:</div>
-                <div class="timer-display" id="timerDisplay">
-                    <span id="days">00</span> :
-                    <span id="hours">00</span> :
-                    <span id="minutes">00</span> :
-                    <span id="seconds">00</span>
-                </div>
-                <div class="timer-labels">
-                    дни&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;часы&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;минуты&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;секунды
-                </div>
-            </div>
-
-            <p class="date-note" id="dateNote">
-                Если ты согласна — просто скажи мне «да» ❤️
-            </p>
+        <div class="invite-image-wrapper">
+            <img src="invitation.jpg" alt="Приглашение">
         </div>
+
+        <p class="date-note">Если ты согласна — просто скажи мне «да» ❤️</p>
     </div>
+
 </div>
 
-<!-- Музыка. Замените music.mp3 на свой аудиофайл -->
-<audio id="loveAudio" src="music.mp3" preload="auto"></audio>
-
 <script>
-    // --- НАСТРОЙКИ ---
+    const CORRECT_ANSWERS = ["тимур", "timur"];
 
-    // Правильные ответы
-    const CORRECT_ANSWERS = [
-        "вират",
-        "virat"
-    ];
-
-    // Дата и время свидания (ПОПРАВЬ ПОД СЕБЯ!)
-    // Формат: "ГГГГ-ММ-ДДTЧЧ:ММ:СС"
-    // Пример: 2025-12-10 20:00:00
-    const TARGET_DATE_STRING = "2025-12-10T20:00:00";
-
-    // --- ЭЛЕМЕНТЫ ---
-
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
     const answerInput = document.getElementById("answerInput");
     const openButton = document.getElementById("openButton");
     const errorText = document.getElementById("errorText");
-    const step1 = document.getElementById("step1");
-    const step2 = document.getElementById("step2");
-    const loveAudio = document.getElementById("loveAudio");
 
-    const daysEl = document.getElementById("days");
-    const hoursEl = document.getElementById("hours");
-    const minutesEl = document.getElementById("minutes");
-    const secondsEl = document.getElementById("seconds");
-    const dateNoteEl = document.getElementById("dateNote");
-
-    let timerInterval = null;
-
-    // --- ФУНКЦИИ ---
-
-    function normalizeAnswer(value) {
-        return value
-            .trim()
-            .toLowerCase()
-            .replace(/\s+/g, " ");
-    }
-
-    function playMusic() {
-        if (!loveAudio) return;
-
-        try {
-            loveAudio.currentTime = 0;
-            const playPromise = loveAudio.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    // если браузер блокирует автоплей — игнорируем
-                });
-            }
-        } catch (e) {
-            // глушим ошибки
-        }
-    }
-
-    function startTimer() {
-        const target = new Date(TARGET_DATE_STRING);
-
-        if (isNaN(target.getTime())) {
-            // если дата некорректна — не запускаем таймер
-            return;
-        }
-
-        // Показать выбранную дату в подписи
-        const options = { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" };
-        const formatted = target.toLocaleString("ru-RU", options);
-        dateNoteEl.textContent = "Наше свидание запланировано на: " + formatted + " 💫";
-
-        function updateTimer() {
-            const now = new Date();
-            const diff = target.getTime() - now.getTime();
-
-            if (diff <= 0) {
-                clearInterval(timerInterval);
-                daysEl.textContent = "00";
-                hoursEl.textContent = "00";
-                minutesEl.textContent = "00";
-                secondsEl.textContent = "00";
-                dateNoteEl.textContent = "Кажется, время нашего свидания уже настало… 💖";
-                return;
-            }
-
-            const seconds = Math.floor(diff / 1000);
-            const d = Math.floor(seconds / (3600 * 24));
-            const h = Math.floor((seconds % (3600 * 24)) / 3600);
-            const m = Math.floor((seconds % 3600) / 60);
-            const s = seconds % 60;
-
-            daysEl.textContent = String(d).padStart(2, "0");
-            hoursEl.textContent = String(h).padStart(2, "0");
-            minutesEl.textContent = String(m).padStart(2, "0");
-            secondsEl.textContent = String(s).padStart(2, "0");
-        }
-
-        updateTimer();
-        timerInterval = setInterval(updateTimer, 1000);
-    }
-
-    function showInvite() {
-        // Анимация смены блоков
-        step1.classList.remove("letter--visible");
-        step1.classList.add("letter--hidden");
-
-        setTimeout(() => {
-            step2.classList.remove("letter--hidden");
-            step2.classList.add("letter--visible");
-            startTimer();
-        }, 260);
+    function normalizeAnswer(v) {
+        return v.trim().toLowerCase().replace(/\s+/g, " ");
     }
 
     function checkAnswer() {
@@ -547,28 +247,25 @@
             return;
         }
 
-        const isCorrect = CORRECT_ANSWERS.some(ans => ans === value);
-
-        if (!isCorrect) {
+        if (!CORRECT_ANSWERS.includes(value)) {
             errorText.textContent = "Кажется, это не тот ответ… попробуй ещё раз 🙂";
             return;
         }
 
         errorText.textContent = "";
 
-        playMusic();
-        showInvite();
+        step1.classList.remove("letter--visible");
+        step1.classList.add("letter--hidden");
+
+        setTimeout(() => {
+            step2.classList.remove("letter--hidden");
+            step2.classList.add("letter--visible");
+        }, 260);
     }
 
-    // --- ОБРАБОТЧИКИ ---
-
     openButton.addEventListener("click", checkAnswer);
-
-    answerInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            checkAnswer();
-        }
-    });
+    answerInput.addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(); });
 </script>
+
 </body>
 </html>
